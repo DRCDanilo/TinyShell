@@ -25,7 +25,7 @@ to deepen our understanding of systems' computer science */
 
 int main() {
 
-	char greetingMessage[GREETING_MESSAGE_LENGTH] = "Good Morning, welcome to the tiny shell.\n\rType 'exit' to leave.\n\renseash % "; 
+	char greetingMessage[GREETING_MESSAGE_LENGTH] = "Good Morning, welcome to the Tiny Shell.\n\rType 'exit' to leave.\n\renseash % "; 
 	
 	int ret = write(STDOUT_FILENO, greetingMessage, GREETING_MESSAGE_LENGTH*sizeof(char));
 	
