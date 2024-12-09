@@ -14,5 +14,7 @@ To execute the project just type `./TinyShell`
 
 ![imagen](https://github.com/user-attachments/assets/1f448950-b79f-4f90-b753-2e38ce614192)
 
+## Running
 
+After executing the programm, it is possible to laucnh a command and see the return code or signal, and the time used to executed.
 
