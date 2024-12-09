@@ -6,3 +6,13 @@ This project was developed by Danilo DEL RIO CISNEROS and Joel COLASO as practic
 
 ## How to Compile
 
+The *Makefile* file developed by the professor Mr. C. BARÈS is needed to compile the project.
+
+## How to Execute
+
+To execute the project just type `./TinyShell`
+
+![imagen](https://github.com/user-attachments/assets/1f448950-b79f-4f90-b753-2e38ce614192)
+
+
+
