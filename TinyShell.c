@@ -23,21 +23,23 @@ to deepen our understanding of systems' computer science */
 //Defines
 
 #define GREETING_MESSAGE_LENGTH 200
+#define GREETING_MESSAGE_TEXT "Good Morning, welcome to the tiny shell.\n\rType 'exit' to leave.\n\renseash % "
+
 #define WAITING_FOR_COMMAND_PROMPT_LENGTH 200
+#define WAITING_FOR_COMMAND_PROMPT_TEXT "\n\renseash[%s:%d] %% "
+#define TERMINATED_BY_SIGNAL_TEXT "sign"
+#define EXITED_NORMALLY_TEXT "exit"
+
 #define COMMAND_BUFFER_SIZE 1000
 
 
 typedef struct timespec timespec;
 
 
-//Beginning of the code
 
 int main() {
-
-	// FD = File Descriptor
-
-	char greetingMessage[GREETING_MESSAGE_LENGTH] = "Good Morning, welcome to the tiny shell.\n\rType 'exit' to leave.\n\renseash % "; 
-	
+	// Display greeting message
+	char greetingMessage[GREETING_MESSAGE_LENGTH] = GREETING_MESSAGE_TEXT; 
 	int ret = write(STDOUT_FILENO, greetingMessage, GREETING_MESSAGE_LENGTH*sizeof(char));
 	if(ret == -1) {
 		perror("write");
@@ -72,7 +74,6 @@ int main() {
 
 				// Execution of the command
 				int pid, status;
-				
 
 				pid = fork();
 				if(pid != 0) { // father code (waits for child)
@@ -82,14 +83,30 @@ int main() {
 					exit(EXIT_FAILURE);
 				}
 				
-				char waitingForCommandPrompt[WAITING_FOR_COMMAND_PROMPT_LENGTH] = "\n\renseash % "; 
+				// Get if the child was terminated by signal or exited 
+				// And with which code
+				char* exitOrSignalText;
+				int exitOrSignalCode;
 				
+				if (WIFSIGNALED(status)) {
+					exitOrSignalText = TERMINATED_BY_SIGNAL_TEXT;
+					exitOrSignalCode = WTERMSIG(status);
+				} else if (WIFEXITED(status)){
+					exitOrSignalText = EXITED_NORMALLY_TEXT;
+					exitOrSignalCode = WEXITSTATUS(status);
+				}
+				
+				// Re-printing the command prompt with information about
+				// the child's execution and termination
+				char waitingForCommandPrompt[WAITING_FOR_COMMAND_PROMPT_LENGTH] = "\n\renseash["; 
+				snprintf(waitingForCommandPrompt, WAITING_FOR_COMMAND_PROMPT_LENGTH, WAITING_FOR_COMMAND_PROMPT_TEXT, exitOrSignalText, exitOrSignalCode);
+
 				int ret = write(STDOUT_FILENO, waitingForCommandPrompt, WAITING_FOR_COMMAND_PROMPT_LENGTH*sizeof(char));				
 				if(ret == -1) {
 					perror("write");
 					exit(EXIT_FAILURE);
 				}
-
+				
 				// Reinitialising the command buffer
 				commandBufferIndex = 0;
 
