@@ -7,7 +7,7 @@ This project was developed by Joel COLADO and Danilo DEL RIO CISNEROS as a pract
 ## How to Compile
 
 The *Makefile* file developed by the professor Mr. C. BARÈS is needed to compile the project.
-With the command *make* inside of the folder where are the files of this project, it is possible to compile the project.
+\nWith the command *make* inside of the folder where are the files of this project, it is possible to compile the project.
 
 ## How to Execute
 
