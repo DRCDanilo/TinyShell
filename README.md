@@ -2,11 +2,12 @@
 
 This repository contains the development of a micro shell, which is able to launch commands and display information about their execution.
 
-This project was developed by Danilo DEL RIO CISNEROS and Joel COLASO as practical work for the Computer Science major module.
+This project was developed by Joel COLADO and Danilo DEL RIO CISNEROS as a practical work for the Computer Science major module in the second year of the engineering school ENSEA.
 
 ## How to Compile
 
 The *Makefile* file developed by the professor Mr. C. BARÈS is needed to compile the project.
+With the command *make* inside of the folder where are the files of this project, it is possible to compile the project.
 
 ## How to Execute
 
