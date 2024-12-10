@@ -18,5 +18,11 @@ To execute the project just type `./TinyShell`
 
 ## Running
 
-After executing the programm, it is possible to laucnh a command and see the return code or signal, and the time used to executed.
+Typing *./TinyShell*, it is possible to execute the micro sheel project:
+
+![image](https://github.com/user-attachments/assets/09bdd14f-1d79-44b5-90d1-f4cce26924bf)
+
+After executing the programm, it is possible to laucnh a command and see the return code or signal, and the time used to executed:
+
+![image](https://github.com/user-attachments/assets/b00726aa-aef6-4d13-9bf6-75926536405e)
 
