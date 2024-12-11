@@ -22,6 +22,7 @@ to deepen our understanding of systems' computer science */
 //Defines
 
 #define NUMBER_OF_NANOSECONDS_IN_ONE_MILLSECOND 1000000
+#define NUMBER_OF_MILLSECONDS_IN_ONE_SECOND 1000
 
 #define GREETING_MESSAGE_LENGTH 200
 #define GREETING_MESSAGE_TEXT "Good Morning, welcome to the tiny shell.\n\rType 'exit' to leave.\n\renseash % "
@@ -33,7 +34,43 @@ to deepen our understanding of systems' computer science */
 
 #define COMMAND_BUFFER_SIZE 1000
 
+#define MAXIMUM_NUMBER_OF_ARGUMENTS 50
+#define MAXIMUM_LENGTH_OF_ARGUMENT 100
+
 typedef struct timespec timespec;
+
+
+//TODO ADD ERROR MANAGEMENT
+char** separateArguments(char* command, int* nArguments) {
+	char** arguments = malloc(MAXIMUM_NUMBER_OF_ARGUMENTS * sizeof(char*));
+
+	const char s[2] = " ";
+	char *token;
+	int iArguments = 1;
+
+	token = strtok(command, s);
+	
+	while( token != NULL ) {
+        arguments[iArguments] = malloc(strlen(token) + 1); 
+		strcpy(arguments[iArguments], token);
+
+		token = strtok(NULL, s);
+	}
+	
+	arguments[0] = arguments[1];
+	
+	*nArguments = iArguments;
+	
+	return arguments;
+}
+
+void freeArguments(char** arguments, int nArguments) {
+    for (int i = 1; i <= nArguments; ++i) {
+        free(arguments[i]);
+    }
+    free(arguments);
+}
+
 
 
 void displayGreeting() {
@@ -61,6 +98,13 @@ void executeCommand (char* commandBuffer, char** exitOrSignalText_output, int* e
 	if (!strcmp(commandBuffer, "exit")) {
 		exit(EXIT_SUCCESS);
 	}
+	
+	int nArguments;
+	
+	char** arguments = separateArguments(commandBuffer, &nArguments);
+	
+	arguments[nArguments] = (char *)NULL;
+	nArguments++;
 
 	int pid, status, ret;
 	timespec beforeExec, afterExec;
@@ -75,6 +119,7 @@ void executeCommand (char* commandBuffer, char** exitOrSignalText_output, int* e
 	if(pid != 0) { // father code (waits for child)
 		waitpid(pid , &status , 0) ;
 	} else {       // child code (executes the command)
+		//execvp(arguments[0], arguments) ;
 		execlp(commandBuffer, commandBuffer , (char *)NULL) ;
 		exit(EXIT_FAILURE);
 	}
@@ -85,7 +130,7 @@ void executeCommand (char* commandBuffer, char** exitOrSignalText_output, int* e
 		exit(EXIT_FAILURE);
 	}		
 	
-	long executionTime = (afterExec.tv_nsec	- beforeExec.tv_nsec)/NUMBER_OF_NANOSECONDS_IN_ONE_MILLSECOND;	
+	long executionTime = NUMBER_OF_MILLSECONDS_IN_ONE_SECOND*(afterExec.tv_sec	- beforeExec.tv_sec) + ((afterExec.tv_nsec	- beforeExec.tv_nsec)/NUMBER_OF_NANOSECONDS_IN_ONE_MILLSECOND);	
 	
 	// Get if the child was terminated by signal or exited 
 	// and with which code
@@ -104,6 +149,7 @@ void executeCommand (char* commandBuffer, char** exitOrSignalText_output, int* e
 	*exitOrSignalCode_output = exitOrSignalCode;
 	*executionTime_output    = executionTime;
 	
+	freeArguments(arguments, nArguments);
 }
 
 
@@ -118,7 +164,6 @@ int main() {
 	// Main loop for processing all commands
 	while(1) {
 		int readReturnValue = read(STDIN_FILENO, &inputCharacter, 1);
-		
 		if (readReturnValue == -1) {
 			perror("read");
 			exit(EXIT_FAILURE);
@@ -130,7 +175,6 @@ int main() {
 				// This is the case for when the command has ended and 
 				// needs to be executed
 				
-				// Complete the command by adding \0 at its end
 				commandBuffer[commandBufferIndex] = '\0';
 		
 				char* exitOrSignalText;
@@ -138,10 +182,9 @@ int main() {
 				long executionTime;
 		
 				executeCommand(commandBuffer, &exitOrSignalText, &exitOrSignalCode, &executionTime);
-				
+			
 				displayPrompt(STDOUT_FILENO, exitOrSignalText, exitOrSignalCode, executionTime);
 				
-				// Reinitialising the command buffer
 				commandBufferIndex = 0;
 
 			} else {
