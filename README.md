@@ -18,11 +18,22 @@ To execute the project just type `./TinyShell`
 
 ## Running
 
-Typing `./TinyShell`, it is possible to execute the micro sheel project:
+Typing `./TinyShell`, it is possible to execute the micro shell project:
 
 ![image](https://github.com/user-attachments/assets/09bdd14f-1d79-44b5-90d1-f4cce26924bf)
 
-After executing the programm, it is possible to launch a command and see the return code or signal, and the time used to executed:
+After executing the program, it is possible to launch a command and see the return code or signal, and the time used to executed:
 
 ![image](https://github.com/user-attachments/assets/b00726aa-aef6-4d13-9bf6-75926536405e)
 
+## Closing the shell
+
+The shell is exited by simply typing "exit" and pressing enter.
+
+## Commands with arguments
+
+Our shell supports the use of arguments, which must be separated by spaces.
+
+## Redirection of input and output
+
+By typing "<" or/and ">" followed by the path of a file, the input or/and output can be redirected. If the output file doesn't exist, it will be created. If it exists, it will be overwritten.
